@@ -1,32 +1,36 @@
 <template>
     <div id="app">
-        <Header/>
+        <Header v-if="this.$store.getters.isLogined"/>
         <AlertMessage/>
         <router-view/>
-        <Footer/>
+        <Footer v-if="this.$store.getters.isLogined"/>
     </div>
 </template>
 
 <style>
-    @import 'assets/stylesheets/materialize.css';
-    @import 'assets/stylesheets/style.css';
-    @import 'flatpickr/dist/flatpickr.css';
+    /*@import 'assets/stylesheets/materialize.css';*/
+    /*@import 'assets/stylesheets/style.css';*/
+    /*@import 'flatpickr/dist/flatpickr.css';*/
 </style>
 
 <script>
-    import Header from './components/Header.vue';
-    import Footer from './components/Footer.vue';
-    import AlertMessage from './components/common/AlertMessage.vue';
-    import '@/assets/javascripts/materialize.js';
-    import '@/assets/javascripts/init.js';
+	import Header from './components/Header.vue';
+	import Footer from './components/Footer.vue';
+	import AlertMessage from './components/common/AlertMessage.vue';
+	// import '@/assets/javascripts/materialize.js';
+	// import '@/assets/javascripts/init.js';
 
-    export default {
-        name: 'App',
-        components: {
-            Header,
-            Footer,
-            AlertMessage,
-        }
-    }
-    ;
+	export default {
+		name: 'App',
+		data() {
+			return {
+				isLogined: this.$store.getters.isLogined,
+			};
+		},
+		components: {
+			Header,
+			Footer,
+			AlertMessage,
+		}
+	};
 </script>

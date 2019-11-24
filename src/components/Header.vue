@@ -1,38 +1,37 @@
 <template>
-    <nav class="blue-grey lighten-2" role="navigation">
-        <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">Intranet</a>
-            <ul class="right hide-on-med-and-down">
-<!--                슈퍼 유저라면 ? ==> -->
-<!--                <li><a href="/teacher/<= mykey %>">내 일지</a></li>-->
-                <li><a href="/students">
-                    학생
-                </a>
-                </li>
-                <li><a href="/teachers">
-                    선생님
-                </a>
-                </li>
-                <li><a href="/lessons">
-                    수업
-                </a>
-                </li>
-<!--                 TODO 메세지 서비스 구현 -->
-<!--                <li><a href="../message">-->
-<!--                메세지-->
-<!--                </a>-->
-<!--                </li>-->
-                <li><a href="/auth/logout">
-                    로그아웃
-                </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    <md-toolbar class="md-primary" md-elevation="1">
+        <h3 class="md-title" style="flex: 1" @click="goMain">Intranet</h3>
+        <md-button @click="goStudent">학생</md-button>
+        <md-button @click="goTeacher">선생님</md-button>
+        <md-button @click="goLesson">수업</md-button>
+        <md-button @click="goSMS">알림</md-button>
+        <md-button @click="doLogout">로그아웃</md-button>
+    </md-toolbar>
 </template>
 
 <script>
-    export default {
-        name: 'Header',
-        props: {},
-    };
+	export default {
+		name: 'Header',
+		props: {},
+		methods: {
+			goMain() {
+				this.$router.push('/');
+			},
+			goStudent() {
+				this.$router.push('/students');
+			},
+			goTeacher() {
+				this.$router.push('/teachers');
+			},
+			goLesson() {
+				this.$router.push('/lessons');
+			},
+			goSMS() {
+				this.$router.push('/sms');
+			},
+			doLogout() {
+				this.$store.dispatch('LOGOUT').then(() => this.$router.push('/auth'));
+			},
+		}
+	};
 </script>

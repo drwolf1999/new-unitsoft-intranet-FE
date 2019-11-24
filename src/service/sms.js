@@ -16,4 +16,12 @@ export default {
                 console.log(error);
             });
     },
+    sendKakao(data) {
+        return axios.post(RestAPI.SERVER_DOMAIN + 'messages/kakao', {
+            data: data,
+        })
+            .catch(error => {
+                console.log(error);
+            });
+    }
 };

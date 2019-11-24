@@ -49,7 +49,10 @@ export default new Vuex.Store({
             return state.lessons;
         },
         isLogined(state) {
-            return state.accessToken != null && state.accessToken != undefined;
+            return state.accessToken != null || state.accessToken != undefined;
+        },
+        getNextDestination(state) {
+            return state.nextDestination;
         },
     },
     mutations: {
@@ -111,7 +114,7 @@ export default new Vuex.Store({
                 });
         },
         LOGIN(state, loginData) {
-            return axios.post(RestAPI.SERVER_DOMAIN + 'users/login', loginData)
+            return axios.post(RestAPI.SERVER_DOMAIN + 'auth/login', loginData)
                 .then((response) => {
                     state.commit('LOGIN', response.headers['access-token']);
                 })

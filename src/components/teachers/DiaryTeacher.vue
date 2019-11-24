@@ -17,9 +17,7 @@
                         <input type="checkbox" v-model="DiaryCheck">
                         <span style="color: red;">[{{Diary.lesson_time.date}} / {{Diary.lesson_time.start}}~{{Diary.lesson_time.end}}] / {{Diary.lesson_type.type}}</span>
                     </label>
-                    &nbsp
                     <a href="javascript:void(0);" @click="doCompleteDiary">결제 완료</a>
-                    &nbsp
                     <a href="javascript:void(0);" @click="doModifyDiary">일지 수정</a>
                 </div>
             </div>

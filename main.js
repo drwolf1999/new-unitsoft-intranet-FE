@@ -5,15 +5,19 @@ import App from './src/App'
 import VueNotification from 'vue-notification';
 import router from './src/router/router.js';
 import store from './src/store/store.js';
-import CoolSelect from 'vue-cool-select';
-import VueDateTime from 'vue-flatpickr-component';
-
+import VueMaterial from 'vue-material';
+import 'vue-material/dist/vue-material.min.css';
+import 'vue-material/dist/theme/default.css'
+import 'vue-search-select/dist/VueSearchSelect.css';
+import Datetime from 'vue-ctk-date-time-picker';
+import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';
 Vue.config.productionTip = false;
 
 Vue.use(VueNotification);
-Vue.use(VueDateTime);
-Vue.use(CoolSelect, {theme: 'material-design'});
-Vue.component('v-TimeDate', VueDateTime);
+
+Vue.component('datetime', Datetime);
+Vue.use(VueMaterial);
+
 // eslint-disable no-new
 new Vue({
     router,

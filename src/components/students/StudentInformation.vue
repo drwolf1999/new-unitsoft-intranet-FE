@@ -1,107 +1,118 @@
 <template>
-    <div class="container">
-        <div class="row">
-            <div class="card">
-                <div class="card-content">
-                    <h4 class="card-title">{{ Student.name }}</h4>
-                    <div class="row">
-                        <div class="col s6">
-                            <label for="school" class="active">학교</label>
-                            <input type="text" name="school" v-model="Student.school" id="school"
-                                   :disabled="!ModifyingStudent" placeholder="학교">
+    <div class="md-layout md-alignment-center">
+        <div class="md-layout-item md-size-70">
+            <md-card md-with-hover>
+                <md-card-header>
+                    <h4 class="md-title">{{ Student.name }}</h4>
+                </md-card-header>
+                <md-card-content>
+                    <div class="md-layout md-gutter">
+                        <div class="md-layout-item md-size-33">
+                            <md-field>
+                                <label for="school">학교</label>
+                                <md-input v-model="Student.school" id="school" :disabled="!ModifyingStudent" placeholder=""></md-input>
+                            </md-field>
                         </div>
-                        <div class="col s6">
-                            <label for="grade" class="active">학년</label>
-                            <input type="text" name="grade" v-model="Student.grade" id="grade"
-                                   :disabled="!ModifyingStudent" placeholder="학년">
+                        <div class="md-layout-item md-size-33">
+                            <md-field>
+                                <label for="grade">학년</label>
+                                <md-input v-model="Student.grade" id="grade" :disabled="!ModifyingStudent" placeholder=""></md-input>
+                            </md-field>
                         </div>
-                        <div class="col s4">
-                            <label for="unitStudy-id" class="active">유닛스터디 ID</label>
-                            <input type="text" name="unitStudy-id" v-model="Student.unitStudyId" id="unitStudy-id"
-                                   :disabled="true" placeholder="unitStudyID">
+                        <div class="md-layout-item md-size-33">
+                            <md-field>
+                                <label for="unitStudy-id">유닛스터디 ID</label>
+                                <md-input v-model="Student.unitStudyId" id="unitStudy-id" :disabled="true" placeholder=""></md-input>
+                            </md-field>
                         </div>
-                        <div class="col s4">
-                            <label for="phone" class="active">학생 전화번호</label>
-                            <input type="text" name="phone" v-model="Student.phone" id="phone"
-                                   :disabled="!ModifyingStudent" placeholder="전화번호">
+                        <div class="md-layout-item md-size-50">
+                            <md-field>
+                                <label for="phone">학생 전화번호</label>
+                                <md-input v-model="Student.phone" id="phone" :disabled="!ModifyingStudent" placeholder=""></md-input>
+                            </md-field>
                         </div>
-                        <div class="col s4">
-                            <label for="parent-phone" class="active">부모님 전화번호</label>
-                            <input type="text" name="parent-phone" v-model="Student.parent_phone" id="parent-phone"
-                                   :disabled="!ModifyingStudent" placeholder="부모님 전화번호">
+                        <div class="md-layout-item md-size-50">
+                            <md-field>
+                                <label for="parent-phone">부모님 전화번호</label>
+                                <md-input v-model="Student.parent_phone" id="parent-phone" :disabled="!ModifyingStudent" placeholder=""></md-input>
+                            </md-field>
                         </div>
                     </div>
-                </div>
-                <div class="card-action">
-                    <a v-if="!ModifyingStudent" href="javascript:void(0);" @click="modifyStudent()" id="change-btn">
+                </md-card-content>
+                <md-card-actions>
+                    <md-button v-if="!ModifyingStudent" @click="modifyStudent()" id="change-btn">
                         <i class="icon icon-pencil"></i> 수정하기
-                    </a>
-                    <a v-else href="javascript:void(0);" @click="doModifyStudent()" id="do-chang-btn">
+                    </md-button>
+                    <md-button v-else @click="doModifyStudent()" id="do-chang-btn">
                         <i class="icon icon-pencil"></i>완료
-                    </a>
-                </div>
-            </div>
+                    </md-button>
+                </md-card-actions>
+            </md-card>
+            <br/>
         </div>
-        <div class="card">
-            <div class="card-content">
-                <h4 class="card-title">일지 추가</h4>
-                <div class="row">
-                    <div class="row">
-                        <Date class="input-field col s4" v-bind:date="Diary.lesson_time.date" label="날짜"
-                              v-on:input="onChangeDiaryDate"></Date>
-                        <Time class="input-field col s4" v-bind:time="Diary.lesson_time.start" label="시작 시간"
-                              v-on:input="onChangeDiaryStart"></Time>
-                        <Time class="input-field col s4" v-bind:time="Diary.lesson_time.end" label="종료 시간"
-                              v-on:input="onChangeDiaryEnd"></Time>
-                        <SelectForm class="input-field col s6" v-bind:selectList="getTeachers" v-on:input="onChangeTeachers"
-                                    name="담당 선생님"></SelectForm>
-                        <SelectForm class="input-field col s6" v-bind:selectList="getLessons" v-on:input="onChangeLessons"
-                                    name="수업 종류"></SelectForm>
-                        <div class="input-field col s12">
-                            <label class="active">상세 내용</label>
-                            <input type="text" id="lesson-about" v-model="Diary.lesson_about">
-                        </div>
+        <div class="md-layout-item md-size-70">
+            <md-card md-with-hover>
+                <md-card-header>
+                    <h4 class="md-title">일지 추가</h4>
+                </md-card-header>
+                <md-card-content>
+                    <div class="md-layout md-gutter">
+                        <Date class="md-layout-item md-size-33" v-bind:date="Diary.lesson_time.date" label="날짜" v-on:input="onChangeDiaryDate"></Date>
+                        <Time class="md-layout-item md-size-33" v-bind:time="Diary.lesson_time.start" label="시작 시간" v-on:input="onChangeDiaryStart"></Time>
+                        <Time class="md-layout-item md-size-33" v-bind:time="Diary.lesson_time.end" label="종료 시간" v-on:input="onChangeDiaryEnd"></Time>
+                        <SelectForm class="md-layout-item md-size-50" v-bind:selectList="getTeachers" v-on:input="onChangeTeachers" name="담당 선생님"></SelectForm>
+                        <SelectForm class="md-layout-item md-size-50" v-bind:selectList="getLessons" v-on:input="onChangeLessons" name="수업 종류"></SelectForm>
+                        <InputForm class="md-layout-item md-size-100" v-bind:data="Diary.lesson_about" v-on:input="onChangeReloadLessonAbout" label="상세내용"></InputForm>
                     </div>
-                </div>
-            </div>
-            <div class="card-action">
-                <a @click="AddStudentDiary()" name="action">일지추가</a>
-            </div>
+                </md-card-content>
+                <md-card-actions>
+                    <md-button @click="AddStudentDiary()" name="action">일지추가</md-button>
+                </md-card-actions>
+            </md-card>
+            <br/>
         </div>
-
-        <div class="card">
-            <div class="card-content">
-                <h4 class="card-title">일지</h4>
-                <h5>횟수({{ Pay.Count }}) / 시간({{ Pay.Time }})</h5>
-                <ul class="collapsible">
-                    <li>
-                        <div class="collapsible-header"><i class="material-icons">clear</i>미결제</div>
-                        <div class="collapsible-body">
-                            <div v-for="diary in noneCompletedDiarys" id="noneCompleteDiarys">
-                                <DiaryStudent v-bind:DiaryInfo="diary" v-on:update="onChangeDiary"></DiaryStudent>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="collapsible-header"><i class="material-icons">check</i>결제 완료</div>
-                        <div class="collapsible-body">
-                            <div class="row">
-                                <div class="col s6">
-                                    <Date class="input-field col s6" v-bind:date="load.start" label="시작"
-                                          v-on:input="onChangeReloadStart"></Date>
-                                    <Date class="input-field col s6" v-bind:date="load.end" label="끝"
-                                          v-on:input="onChangeReloadEnd"></Date>
-                                </div>
-                                <div class="col s6">
-                                    <div v-for="diary in CompletedDiarys" id="diary-list">
-                                        <DiaryStudent v-bind:DiaryInfo="diary"></DiaryStudent>
+        <div class="md-layout-item md-size-70">
+            <md-card md-with-hover>
+                <md-card-header>
+                    <h4 class="md-title">일지</h4>
+                </md-card-header>
+                <md-card-content>
+                    <div class="md-layout md-alignment-center">
+                        <md-card class="md-layout-item md-size-100">
+                            <md-card-header>
+                                <md-button v-on:click="noneCompletedShow = !noneCompletedShow">
+                                    <md-icon>clear</md-icon>
+                                    미결제 (횟수({{ Pay.Count }}) / 시간({{ Pay.Time }}))
+                                </md-button>
+                            </md-card-header>
+                            <md-card-content>
+                                <transition name="fade">
+                                    <div v-if="noneCompletedShow">
+                                        <DiaryStudent v-for="diary in noneCompletedDiarys" v-bind:DiaryInfo="diary" v-on:update="onChangeDiary"></DiaryStudent>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+                                </transition>
+                            </md-card-content>
+                        </md-card>
+                        <md-card class="md-layout-item md-size-100">
+                            <md-card-header>
+                                <md-button v-on:click="CompletedShow = !CompletedShow">
+                                    <md-icon>check</md-icon>
+                                    결제 완료
+                                </md-button>
+                            </md-card-header>
+                            <md-card-content>
+                                <transition name="faded">
+                                    <div v-if="CompletedShow" class="md-layout">
+                                        <Date class="md-layout-item md-size-50" v-bind:date="load.start" label="시작" v-on:input="onChangeReloadStart"></Date>
+                                        <Date class="md-layout-item md-size-50" v-bind:date="load.end" label="끝" v-on:input="onChangeReloadEnd"></Date>
+                                        <DiaryStudent v-for="diary in CompletedDiarys" v-bind:DiaryInfo="diary"></DiaryStudent>
+                                    </div>
+                                </transition>
+                            </md-card-content>
+                        </md-card>
+                    </div>
+                </md-card-content>
+            </md-card>
         </div>
     </div>
 </template>
@@ -113,12 +124,12 @@
 	import DiaryStudent from './DiaryStudent.vue';
 	import Date from '../form/Date.vue';
 	import Time from '../form/Time.vue';
+	import InputForm from '../form/Input.vue';
 	import Utility from '../../Utility/Utility.js';
 
 	export default {
 		name: 'StudentInformation',
 		mounted() {
-			$('.collapsible').collapsible();
 			this.$store.dispatch('fetchTeachers');
 			this.$store.dispatch('fetchLessons');
 			this.fetchStudent();
@@ -156,7 +167,9 @@
 				load: {
 					start: Utility.getDateBaseNow(0, -1, 0),
 					end: Utility.getDateBaseNow(0, 0, 0),
-				}
+				},
+				noneCompletedShow: false,
+				CompletedShow: false,
 			};
 		},
 		computed: {
@@ -224,6 +237,9 @@
 			},
 			onChangeDiaryEnd(value) {
 				this.Diary.lesson_time.end = value;
+			},
+			onChangeReloadLessonAbout(value) {
+				this.Diary.lesson_about = value;
 			},
 			onChangeReloadStart(value) {
 				this.load.start = value;
@@ -397,6 +413,25 @@
 			DiaryStudent,
 			Date,
 			Time,
+			InputForm,
 		},
 	};
 </script>
+
+<style lang="scss" scoped>
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s;
+    }
+
+    .fade-enter, .fade-leave-to {
+        opacity: 0;
+    }
+
+    .faded-enter-active, .faded-leave-active {
+        transition: opacity .5s;
+    }
+
+    .faded-enter, .faded-leave-to {
+        opacity: 0;
+    }
+</style>
