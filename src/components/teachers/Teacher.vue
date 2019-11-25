@@ -34,7 +34,7 @@
             </md-card>
             <br>
         </div>
-        <div class="md-layout-item md-size-70 md-medium-size-5">
+        <div class="md-layout-item md-size-70">
             <md-card md-with-hover>
                 <md-card-header>
                     <div class="md-title">선생님</div>
