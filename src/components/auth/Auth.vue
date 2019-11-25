@@ -1,64 +1,66 @@
 <template>
-    <div v-if="LoginMode">
-        <form novalidate class="md-layout" @submit.prevent="validateUser('Login')">
-            <md-card class="md-layout-item md-size-50 md-small-size-100">
-                <md-progress-bar md-mode="indeterminate" v-if="sending"/>
-                <md-card-header>
-                    <div class="md-title">Login</div>
-                </md-card-header>
+    <div class="md-layout md-alignment-center">
+        <div v-if="LoginMode" class="md-layout-item md-size-80">
+            <form novalidate class="md-layout md-alignment-center" @submit.prevent="validateUser('Login')">
+                <md-card class="md-layout-item md-size-50 md-small-size-100">
+                    <md-progress-bar md-mode="indeterminate" v-if="sending"/>
+                    <md-card-header>
+                        <div class="md-title">Login</div>
+                    </md-card-header>
 
-                <md-card-content>
-                    <md-field :class="getValidationClass('username')">
-                        <label for="login-username">username</label>
-                        <md-input type="text" name="login-username" id="login-username" v-model="Login.username" :disabled="sending"/>
-                        <span class="md-error" v-if="!$v.Login.username.required">The username is required</span>
-                        <span class="md-error" v-if="!$v.Login.username.minLength">The username is very short!</span>
-                        <span class="md-error" v-if="!$v.Login.username.maxLength">The username is very long! </span>
-                    </md-field>
-                    <md-field :class="getValidationClass('password')">
-                        <label for="login-password">password</label>
-                        <md-input type="password" name="login-password" id="login-password" v-model="Login.password" :disabled="sending"/>
-                        <span class="md-error" v-if="!$v.Login.password.required">The password is required</span>
-                        <span class="md-error" v-if="!$v.Login.password.minLength">The password is very short!</span>
-                        <span class="md-error" v-if="!$v.Login.password.maxLength">The password is very long! </span>
-                    </md-field>
-                </md-card-content>
+                    <md-card-content>
+                        <md-field :class="getValidationClass('username')">
+                            <label for="login-username">username</label>
+                            <md-input type="text" name="login-username" id="login-username" v-model="Login.username" :disabled="sending"/>
+                            <span class="md-error" v-if="!$v.Login.username.required">The username is required</span>
+                            <span class="md-error" v-if="!$v.Login.username.minLength">The username is very short!</span>
+                            <span class="md-error" v-if="!$v.Login.username.maxLength">The username is very long! </span>
+                        </md-field>
+                        <md-field :class="getValidationClass('password')">
+                            <label for="login-password">password</label>
+                            <md-input type="password" name="login-password" id="login-password" v-model="Login.password" :disabled="sending"/>
+                            <span class="md-error" v-if="!$v.Login.password.required">The password is required</span>
+                            <span class="md-error" v-if="!$v.Login.password.minLength">The password is very short!</span>
+                            <span class="md-error" v-if="!$v.Login.password.maxLength">The password is very long! </span>
+                        </md-field>
+                    </md-card-content>
 
-                <md-card-actions>
-                    <md-button type="submit" class="md-primary" :disabled="sending">Login</md-button>
-                    <md-button type="button" class="md-primary" @click="Mode">RegisterMode</md-button>
-                </md-card-actions>
-            </md-card>
-        </form>
-    </div>
-    <div v-else>
-        <form novalidate class="md-layout" @submit.prevent="validateUser('Register')">
-            <md-card class="md-layout-item md-size-50 md-small-size-100">
-                <md-card-header>
-                    <div class="md-title">Register</div>
-                </md-card-header>
+                    <md-card-actions>
+                        <md-button type="submit" class="md-primary" :disabled="sending">Login</md-button>
+                        <md-button type="button" class="md-primary" @click="Mode">RegisterMode</md-button>
+                    </md-card-actions>
+                </md-card>
+            </form>
+        </div>
+        <div v-else class="md-layout-item md-size-80">
+            <form novalidate class="md-layout md-alignment-center" @submit.prevent="validateUser('Register')">
+                <md-card class="md-layout-item md-size-50 md-small-size-100">
+                    <md-card-header>
+                        <div class="md-title">Register</div>
+                    </md-card-header>
 
-                <md-card-content>
-                    <md-field :class="getValidationClass('username')">
-                        <label for="register-username">username</label>
-                        <md-input type="text" name="register-username" id="register-username" v-model="Register.username" :disabled="sending"/>
-                        <span class="md-error" v-if="!$v.Register.username.required">The username is required</span>
-                    </md-field>
-                    <md-field :class="getValidationClass('password')">
-                        <label for="register-password">password</label>
-                        <md-input type="password" name="register-password" id="register-password" v-model="Register.password" :disabled="sending"/>
-                        <span class="md-error" v-if="!$v.Register.password.required">The password is required</span>
-                    </md-field>
-                </md-card-content>
+                    <md-card-content>
+                        <md-field :class="getValidationClass('username')">
+                            <label for="register-username">username</label>
+                            <md-input type="text" name="register-username" id="register-username" v-model="Register.username" :disabled="sending"/>
+                            <span class="md-error" v-if="!$v.Register.username.required">The username is required</span>
+                        </md-field>
+                        <md-field :class="getValidationClass('password')">
+                            <label for="register-password">password</label>
+                            <md-input type="password" name="register-password" id="register-password" v-model="Register.password" :disabled="sending"/>
+                            <span class="md-error" v-if="!$v.Register.password.required">The password is required</span>
+                        </md-field>
+                    </md-card-content>
 
-                <md-progress-bar md-mode="indeterminate" v-if="sending"/>
+                    <md-progress-bar md-mode="indeterminate" v-if="sending"/>
 
-                <md-card-actions>
-                    <md-button type="submit" class="md-primary" :disabled="sending">Register</md-button>
-                    <md-button type="button" class="md-primary" @click="Mode">LoginMode</md-button>
-                </md-card-actions>
-            </md-card>
-        </form>
+                    <md-card-actions>
+                        <md-button type="submit" class="md-primary" :disabled="sending">Register</md-button>
+                        <md-button type="button" class="md-primary" @click="Mode">LoginMode</md-button>
+                    </md-card-actions>
+                </md-card>
+            </form>
+        </div>
     </div>
 </template>
 
@@ -147,7 +149,7 @@
 				})
 					.then(() => {
 						this.sending = false;
-						if(this.$store.getters.isLogined) {
+						if (this.$store.getters.isLogined) {
 							this.$notify({
 								title: '로그인 성공!',
 								text: '로그인에 성공하였습니다.',
@@ -160,7 +162,7 @@
 								text: '정보를 다시 입력해주세요',
 								type: 'error',
 							});
-                        }
+						}
 					})
 					.catch(error => {
 						this.sending = false;
