@@ -68,8 +68,8 @@
                     </md-button>
                 </md-card-actions>
             </md-card>
+            <br>
         </div>
-        <br>
     </div>
 </template>
 

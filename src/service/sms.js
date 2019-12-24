@@ -17,9 +17,7 @@ export default {
             });
     },
     sendKakao(data) {
-        return axios.post(RestAPI.SERVER_DOMAIN + 'messages/kakao', {
-            data: data,
-        })
+        return axios.post(RestAPI.SERVER_DOMAIN + 'messages/kakao', data)
             .catch(error => {
                 console.log(error);
             });

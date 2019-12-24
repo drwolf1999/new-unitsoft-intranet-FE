@@ -57,9 +57,9 @@
                 </md-card-header>
                 <md-card-content>
                     <div class="md-layout md-gutter">
-                        <Date class="md-layout-item md-size-33" v-bind:date="Diary.lesson_time.date" label="날짜" v-on:input="onChangeDiaryDate"></Date>
-                        <Time class="md-layout-item md-size-33" v-bind:time="Diary.lesson_time.start" label="시작 시간" v-on:input="onChangeDiaryStart"></Time>
-                        <Time class="md-layout-item md-size-33" v-bind:time="Diary.lesson_time.end" label="종료 시간" v-on:input="onChangeDiaryEnd"></Time>
+                        <Date class="md-layout-item md-size-33" v-bind:date="Diary.lesson_date" label="날짜" v-on:input="onChangeDiaryDate"></Date>
+                        <Time class="md-layout-item md-size-33" v-bind:time="Diary.lesson_start" label="시작 시간" v-on:input="onChangeDiaryStart"></Time>
+                        <Time class="md-layout-item md-size-33" v-bind:time="Diary.lesson_end" label="종료 시간" v-on:input="onChangeDiaryEnd"></Time>
                         <SelectForm class="md-layout-item md-size-50" v-bind:selectList="getTeachers" v-on:input="onChangeTeachers" name="담당 선생님"></SelectForm>
                         <SelectForm class="md-layout-item md-size-50" v-bind:selectList="getLessons" v-on:input="onChangeLessons" name="수업 종류"></SelectForm>
                         <InputForm class="md-layout-item md-size-100" v-bind:data="Diary.lesson_about" v-on:input="onChangeReloadLessonAbout" label="상세내용"></InputForm>
@@ -105,7 +105,7 @@
                                     <div v-if="CompletedShow" class="md-layout">
                                         <Date class="md-layout-item md-size-50" v-bind:date="load.start" label="시작" v-on:input="onChangeReloadStart"></Date>
                                         <Date class="md-layout-item md-size-50" v-bind:date="load.end" label="끝" v-on:input="onChangeReloadEnd"></Date>
-                                        <DiaryStudent v-for="diary in CompletedDiarys" v-bind:DiaryInfo="diary"></DiaryStudent>
+
                                     </div>
                                 </transition>
                             </md-card-content>
@@ -151,11 +151,9 @@
 				Diary: {
 					teacher: null,
 					lesson_type: null,
-					lesson_time: {
-						date: Utility.getDateBaseNow(0, 0, 0),
-						start: Utility.getTimeBaseNow(-3, 0),
-						end: Utility.getTimeBaseNow(0, 0),
-					},
+					lesson_date: Utility.getDateBaseNow(0, 0, 0),
+					lesson_start: Utility.getTimeBaseNow(-3, 0),
+					lesson_end: Utility.getTimeBaseNow(0, 0),
 					lesson_about: '',
 					lesson_complete: false,
 				},
@@ -230,13 +228,13 @@
 				this.Diary.lesson_type = value;
 			},
 			onChangeDiaryDate(value) {
-				this.Diary.lesson_time.date = value;
+				this.Diary.lesson_date = value;
 			},
 			onChangeDiaryStart(value) {
-				this.Diary.lesson_time.start = value;
+				this.Diary.lesson_start = value;
 			},
 			onChangeDiaryEnd(value) {
-				this.Diary.lesson_time.end = value;
+				this.Diary.lesson_end = value;
 			},
 			onChangeReloadLessonAbout(value) {
 				this.Diary.lesson_about = value;
@@ -250,9 +248,9 @@
 				this.fetchStudentDiarys();
 			},
 			isValidDiaryDuration() {
-				if (this.Diary.lesson_time.date === '' || this.Diary.lesson_time.start === '' || this.Diary.lesson_time.end === '')
+				if (this.Diary.lesson_date === '' || this.Diary.lesson_start === '' || this.Diary.lesson_end === '')
 					return false;
-				else if (Utility.compareTime(this.Diary.lesson_time.start, this.Diary.lesson_time.end) >= 0)
+				else if (Utility.compareTime(this.Diary.lesson_start, this.Diary.lesson_end) >= 0)
 					return false;
 				return true;
 			},
@@ -268,10 +266,12 @@
 				} else if (type === 'Edit') {
 					//
 				}
-				value.lesson_time.date = Utility.StringToDate(value.lesson_time.date);
+				value.lesson_date = Utility.StringToDate(value.lesson_date);
 				StudentService.updateStudentDiary(value._id, {
 					lesson_complete: value.lesson_complete,
-					lesson_time: JSON.stringify(value.lesson_time),
+                    lesson_date: value.lesson_date,
+                    lesson_start: value.lesson_start,
+                    lesson_end: value.lesson_end,
 					lesson_about: value.lesson_about,
 				})
 					.then(response => {
@@ -284,9 +284,9 @@
 							this.CompletedDiarys.push(response.data.Diary);
 							this.noneCompletedDiarys = Utility.removeElemntByValue(this.noneCompletedDiarys, response.data.Diary);
 							this.Pay.Count--;
-							this.Pay.Time -= Utility.duration(value.lesson_time.start, value.lesson_time.end);
+							this.Pay.Time -= Utility.duration(value.lesson_start, value.lesson_end);
 						} else if (type === 'Edit') {
-							this.Pay.Time += Utility.duration(typeValue.start, typeValue.end) - Utility.duration(value.lesson_time.start, value.lesson_time.end);
+							this.Pay.Time += Utility.duration(typeValue.start, typeValue.end) - Utility.duration(value.lesson_start, value.lesson_end);
 							SMSService.sendSMS({
 								to: this.Student.parent_phone,
 								text: this.Student.name + '학생의 수정된 수업 입니다.\n' + Utility.LessonInfo(value),
@@ -324,7 +324,7 @@
 								this.CompletedDiarys.push(diary);
 							} else {
 								this.noneCompletedDiarys.push(diary);
-								this.Pay.Time += parseFloat(Utility.duration(diary.lesson_time.start, diary.lesson_time.end));
+								this.Pay.Time += parseFloat(Utility.duration(diary.lesson_start, diary.lesson_end));
 								this.Pay.Count++;
 							}
 						});
@@ -366,11 +366,14 @@
 					});
 					return;
 				}
+				console.log(JSON.stringify(this.Diary));
 				StudentService.addStudentDiary({
 					student_id: this.Student._id,
 					teacher: this.Diary.teacher,
 					lesson_type: this.Diary.lesson_type,
-					lesson_time: JSON.stringify(this.Diary.lesson_time),
+					lesson_date: this.Diary.lesson_date,
+                    lesson_start: this.Diary.lesson_start,
+                    lesson_end: this.Diary.lesson_end,
 					lesson_about: this.Diary.lesson_about,
 				})
 					.then((response) => {
@@ -380,9 +383,9 @@
 							type: 'success',
 						});
 						this.Pay.Count++;
-						this.Pay.Time += parseFloat(Utility.duration(response.data.Diary.lesson_time.start, response.data.Diary.lesson_time.end));
+						this.Pay.Time += parseFloat(Utility.duration(response.data.Diary.lesson_start, response.data.Diary.lesson_end));
 						this.noneCompletedDiarys.push(response.data.Diary);
-						console.log('init');
+						console.log('the end...');
 						SMSService.sendSMS({
 							to: this.Student.parent_phone,
 							text: this.Student.name + '학생의 수업 내용입니다.\n' + Utility.LessonInfo(response.data.Diary),

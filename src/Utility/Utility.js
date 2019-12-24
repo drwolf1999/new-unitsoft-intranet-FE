@@ -5,9 +5,9 @@ export default class Utility {
         const month = date.getMonth() + 1;
         const day = date.getDate();
         let hours = date.getHours();
-        if(hours < 10) hours = '0' + hours;
+        if (hours < 10) hours = '0' + hours;
         let minutes = date.getMinutes();
-        if(minutes < 10) minutes = '0' + minutes;
+        if (minutes < 10) minutes = '0' + minutes;
         return {year, month, day, hours, minutes};
     }
 
@@ -89,7 +89,40 @@ export default class Utility {
     }
 
     static LessonInfo(Diary) {
-        let info = '[' + Diary.lesson_time.date + '/' + Diary.lesson_time.start + '~' + Diary.lesson_time.end + '] ' + Diary.lesson_type.type + ' / ' + Diary.lesson_about;
+        let info = '[' + Diary.lesson_date + '/' + Diary.lesson_start + '~' + Diary.lesson_end + '] ' + Diary.lesson_type.type + ' / ' + Diary.lesson_about;
         return info;
+    }
+
+    static kakaoAddTag(template) {
+        let ret = template;
+        ret = ret.replace(/#{/gi, '<b style="color: red;">#{');
+        ret = ret.replace(/!{/gi, '<b style="color: red;">!{');
+        ret = ret.replace(/}/gi, '}</b>');
+        return ret;
+    }
+
+    static kakaoParse(template, type) {
+        let obj = [],
+            set1 = new Set();
+        let start = -1, end = -1;
+        while (true) {
+            start = template.indexOf(type + '{', end + 1);
+            if (start === -1) break;
+            end = template.indexOf('}', start + 1);
+            let subs = template.substring(start + 2, end);
+            if (set1.has(subs)) continue;
+            set1.add(subs);
+            obj.push(subs);
+        }
+        return obj;
+    }
+
+    static kakaoReplace(template, type, subs, target) {
+        let ret = template;
+        const reg = '<b style="color: red;">' + type + '{' + subs + '}</b>';
+        console.log(reg);
+        console.log(ret.indexOf(reg));
+        console.log(ret.replace(new RegExp(reg, 'gi'), target));
+        return ret.replace(new RegExp(reg, 'gi'), target);
     }
 }

@@ -2,13 +2,13 @@
     <div class="row">
         <div id="view-element">
             <div v-if="Diary.lesson_complete">
-                <span>[{{Diary.lesson_time.date}} / {{Diary.lesson_time.start}}~{{Diary.lesson_time.end}}] {{Diary.teacher.name}} / {{Diary.lesson_type.type}} / {{Diary.lesson_about}}</span>
+                <span>[{{Diary.lesson_date}} / {{Diary.lesson_start}}~{{Diary.lesson_end}}] {{Diary.teacher.name}} / {{Diary.lesson_type.type}} / {{Diary.lesson_about}}</span>
             </div>
             <div v-else>
                 <div id="edit-element" v-if="isModifyingDiary">
-                    <Date v-bind:date="Diary.lesson_time.date" class="" label="날짜" v-on:input="onModifyDiaryDate"></Date>
-                    <Time v-bind:time="Diary.lesson_time.start" class="" label="시작 시간" v-on:input="onModifyDiaryStart"></Time>
-                    <Time v-bind:time="Diary.lesson_time.end" class="" label="종료 시간" v-on:input="onModifyDiaryEnd"></Time>
+                    <Date v-bind:date="Diary.lesson_date" class="" label="날짜" v-on:input="onModifyDiaryDate"></Date>
+                    <Time v-bind:time="Diary.lesson_start" class="" label="시작 시간" v-on:input="onModifyDiaryStart"></Time>
+                    <Time v-bind:time="Diary.lesson_end" class="" label="종료 시간" v-on:input="onModifyDiaryEnd"></Time>
                     <InputForm readonly id="edit-teacher" v-model="Diary.teacher.name"></InputForm>
                     <InputForm readonly id="edit-lesson-type" v-model="Diary.lesson_type.type"></InputForm>
                     <InputForm id="edit-lesson-about" v-model="Diary.lesson_about"></InputForm>
@@ -17,7 +17,7 @@
                 <div v-else>
                     <!-- TODO 디자인 수정 -->
                     <md-checkbox v-model="DiaryCheck">
-                        [{{Diary.lesson_time.date}} / {{Diary.lesson_time.start}}~{{Diary.lesson_time.end}}] {{Diary.teacher.name}} / {{Diary.lesson_type.type}} / {{Diary.lesson_about}}
+                        [{{Diary.lesson_date}} / {{Diary.lesson_start}}~{{Diary.lesson_end}}] {{Diary.teacher.name}} / {{Diary.lesson_type.type}} / {{Diary.lesson_about}}
                         <a href="javascript:void(0);" @click="doCompleteDiary" class="">결제 완료</a>
                         <a href="javascript:void(0);" @click="doModifyDiary" class="">일지 수정</a>
                     </md-checkbox>
@@ -41,8 +41,8 @@
 				isModifyingDiary: false,
 				Diary: this.DiaryInfo,
 				origin: {
-					start: this.DiaryInfo.lesson_time.start,
-					end: this.DiaryInfo.lesson_time.end,
+					start: this.DiaryInfo.lesson_start,
+					end: this.DiaryInfo.lesson_end,
 				},
 			};
 		},
@@ -51,13 +51,13 @@
 		},
 		methods: {
 			onModifyDiaryDate(value) {
-				this.Diary.lesson_time.date = value;
+				this.Diary.lesson_date = value;
 			},
 			onModifyDiaryStart(value) {
-				this.Diary.lesson_time.start = value;
+				this.Diary.lesson_start = value;
 			},
 			onModifyDiaryEnd(value) {
-				this.Diary.lesson_time.end = value;
+				this.Diary.lesson_end = value;
 			},
 			EditDiary() {
 				this.isModifyingDiary = false;

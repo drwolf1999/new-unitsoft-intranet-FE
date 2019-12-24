@@ -1,8 +1,5 @@
 <template>
-    <div v-bind:class="Class" class="material">
-        <label>{{ Label }}</label>
-        <datetime no-label minute-interval="5" format="hh:mm" output-format="hh:mm a" v-model="TimeData" v-on:input="onInput()" only-time></datetime>
-    </div>
+    <datetime only-time :label="Label" format="hh:mm a" formatted="hh:mm a" v-model='TimeData' v-on:input="onInput()"></datetime>
 </template>
 
 <script>

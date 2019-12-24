@@ -1,7 +1,6 @@
 <template>
-    <div v-bind:class="Class">
-        <label>{{ Label }}</label>
-        <datetime only-date no-label format="YYYY-MM-DD" formatted="ll" v-model="DateData" v-on:input="onInput()"></datetime>
+    <div>
+        <datetime only-date :label="Label" format="YYYY-MM-DD" formatted="ll" v-model="DateData" v-on:input="onInput()"></datetime>
     </div>
 </template>
 

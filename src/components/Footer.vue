@@ -92,7 +92,7 @@
     footer {
         background: rgb(156, 52, 236);
         margin-top: auto;
-        width: 100%
+        width: 100%;
     }
 
     .footer-list-top {

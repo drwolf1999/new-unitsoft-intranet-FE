@@ -39,9 +39,9 @@
                 </md-card-header>
                 <md-card-content>
                     <div class="md-layout md-gutter">
-                        <Date class="md-layout-item md-size-33" v-bind:date="Diary.lesson_time.date" label="날짜" v-on:input="onChangeDiaryDate"></Date>
-                        <Time class="md-layout-item md-size-33" v-bind:time="Diary.lesson_time.start" label="시작 시간" v-on:input="onChangeDiaryStart"></Time>
-                        <Time class="md-layout-item md-size-33" v-bind:time="Diary.lesson_time.end" label="종료 시간" v-on:input="onChangeDiaryEnd"></Time>
+                        <Date class="md-layout-item md-size-33" v-bind:date="Diary.lesson_date" label="날짜" v-on:input="onChangeDiaryDate"></Date>
+                        <Time class="md-layout-item md-size-33" v-bind:time="Diary.lesson_start" label="시작 시간" v-on:input="onChangeDiaryStart"></Time>
+                        <Time class="md-layout-item md-size-33" v-bind:time="Diary.lesson_end" label="종료 시간" v-on:input="onChangeDiaryEnd"></Time>
                         <SelectForm class="md-layout-item md-size-100" v-bind:selectList="getLessons" v-on:input="onChangeLessons" label="수업 종류"></SelectForm>
                     </div>
                 </md-card-content>
@@ -121,6 +121,9 @@
 		},
 		data() {
 			return {
+				Label: 'test',
+                vv: null,
+
 				Teacher: {
 					name: '',
 					department: '',
@@ -131,11 +134,9 @@
 				noneCompletedDiarys: [],
 				Diary: {
 					lesson_type: null,
-					lesson_time: {
-						date: Utility.getDateBaseNow(0, 0, 0),
-						start: Utility.getTimeBaseNow(-3, 0),
-						end: Utility.getTimeBaseNow(0, 0),
-					},
+					lesson_date: Utility.getDateBaseNow(0, 0, 0),
+					lesson_start: Utility.getTimeBaseNow(-3, 0),
+					lesson_end: Utility.getTimeBaseNow(0, 0),
 				},
 				idSelectAll: false,
 				Pay: {
@@ -201,13 +202,13 @@
 				this.Diary.lesson_type = value;
 			},
 			onChangeDiaryDate(value) {
-				this.Diary.lesson_time.date = value;
+				this.Diary.lesson_date = value;
 			},
 			onChangeDiaryStart(value) {
-				this.Diary.lesson_time.start = value;
+				this.Diary.lesson_start = value;
 			},
 			onChangeDiaryEnd(value) {
-				this.Diary.lesson_time.end = value;
+				this.Diary.lesson_end = value;
 			},
 			onChangeStudent(value) {
 				this.SelectedStudent = value;
@@ -219,10 +220,12 @@
 				this.load.end = value;
 			},
 			onChangeDiary(value, type, typeValue) {
-				value.lesson_time.date = Utility.StringToDate(value.lesson_time.date);
+				value.lesson_date = Utility.StringToDate(value.lesson_date);
 				TeacherService.updateTeacherDiary(value._id, {
 					lesson_complete: value.lesson_complete,
-					lesson_time: JSON.stringify(value.lesson_time),
+					lesson_date: value.lesson_date,
+					lesson_start: value.lesson_start,
+					lesson_end: value.lesson_end,
 				})
 					.then(response => {
 						this.$notify({
@@ -234,9 +237,9 @@
 							this.CompletedDiarys.push(value);
 							this.noneCompletedDiarys = Utility.removeElemntByValue(this.noneCompletedDiarys, value);
 							this.Pay.Count--;
-							this.Pay.Time -= Utility.duration(value.lesson_time.start, value.lesson_time.end);
+							this.Pay.Time -= Utility.duration(value.lesson_start, value.lesson_end);
 						} else if (type === 'Edit') {
-							this.Pay.Time += Utility.duration(typeValue.start, typeValue.end) - Utility.duration(value.lesson_time.start, value.lesson_time.end);
+							this.Pay.Time += Utility.duration(typeValue.start, typeValue.end) - Utility.duration(value.lesson_start, value.lesson_end);
 						}
 					})
 					.catch(error => {
@@ -248,6 +251,24 @@
 			},
 			doModifyTeacher() {
 				this.ModifyingTeacher = false;
+				TeacherService.updateTeacher(this.$route.params.TeacherId, {
+					department: this.Teacher.department,
+                    phone: this.Teacher.phone,
+                })
+                    .then((response) => {
+                    	this.$notify({
+                            title: '성공',
+                            text: '선생님 정보 수정에 성공했습니다.',
+                            type: 'success',
+                        });
+                    })
+                    .catch((error) => {
+						this.$notify({
+							title: '실패',
+							text: '선생님 정보 수정에 실패했습니다.',
+							type: 'error',
+						});
+                    });
 			},
 			fetchTeacher() {
 				TeacherService.getTeacher(this.$route.params.TeacherId)
@@ -271,7 +292,7 @@
 								this.CompletedDiarys.push(diary);
 							} else {
 								this.noneCompletedDiarys.push(diary);
-								this.Pay.Time += parseFloat(Utility.duration(diary.lesson_time.start, diary.lesson_time.end));
+								this.Pay.Time += parseFloat(Utility.duration(diary.lesson_start, diary.lesson_end));
 								this.Pay.Count++;
 							}
 						})
@@ -300,7 +321,9 @@
 				// alert('INIT');
 				TeacherService.addTeacherDiary({
 					teacher: this.$route.params.TeacherId,
-					lesson_time: JSON.stringify(this.Diary.lesson_time),
+					lesson_date: this.Diary.lesson_date,
+					lesson_start: this.Diary.lesson_start,
+					lesson_end: this.Diary.lesson_end,
 					lesson_type: this.Diary.lesson_type,
 				})
 					.then((response) => {
@@ -309,8 +332,9 @@
 							type: 'success',
 						});
 						this.Pay.Count++;
-						this.Pay.Time += parseFloat(Utility.duration(response.data.Diary.lesson_time.start, response.data.Diary.lesson_time.end));
+						this.Pay.Time += parseFloat(Utility.duration(response.data.Diary.lesson_start, response.data.Diary.lesson_end));
 						this.noneCompletedDiarys.push(response.data.Diary);
+						console.log('diary ' + JSON.stringify(response.data.Diary));
 					})
 					.catch((error) => {
 						this.$notify({

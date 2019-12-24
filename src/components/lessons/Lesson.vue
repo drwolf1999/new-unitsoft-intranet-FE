@@ -1,7 +1,7 @@
 <template>
     <div class="md-layout md-alignment-center">
-        <br>
         <div class="md-layout-item md-size-70">
+            <br>
             <md-card md-with-hover>
                 <md-table>
                     <md-table-toolbar>
