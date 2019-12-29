@@ -88,7 +88,9 @@
                             <md-card-content>
                                 <transition name="fade">
                                     <div v-if="noneCompletedShow">
-                                        <DiaryStudent v-for="diary in noneCompletedDiarys" v-bind:DiaryInfo="diary" v-on:update="onChangeDiary"></DiaryStudent>
+                                        <md-list>
+                                            <DiaryStudent v-for="diary in noneCompletedDiarys" v-bind:DiaryInfo="diary" v-on:update="onChangeDiary"></DiaryStudent>
+                                        </md-list>
                                     </div>
                                 </transition>
                             </md-card-content>
@@ -105,7 +107,9 @@
                                     <div v-if="CompletedShow" class="md-layout">
                                         <Date class="md-layout-item md-size-50" v-bind:date="load.start" label="시작" v-on:input="onChangeReloadStart"></Date>
                                         <Date class="md-layout-item md-size-50" v-bind:date="load.end" label="끝" v-on:input="onChangeReloadEnd"></Date>
-
+                                        <md-list>
+                                            <DiaryStudent v-for="diary in CompletedDiarys" v-bind:DiaryInfo="diary"></DiaryStudent>
+                                        </md-list>
                                     </div>
                                 </transition>
                             </md-card-content>
@@ -269,9 +273,9 @@
 				value.lesson_date = Utility.StringToDate(value.lesson_date);
 				StudentService.updateStudentDiary(value._id, {
 					lesson_complete: value.lesson_complete,
-                    lesson_date: value.lesson_date,
-                    lesson_start: value.lesson_start,
-                    lesson_end: value.lesson_end,
+					lesson_date: value.lesson_date,
+					lesson_start: value.lesson_start,
+					lesson_end: value.lesson_end,
 					lesson_about: value.lesson_about,
 				})
 					.then(response => {
@@ -287,10 +291,10 @@
 							this.Pay.Time -= Utility.duration(value.lesson_start, value.lesson_end);
 						} else if (type === 'Edit') {
 							this.Pay.Time += Utility.duration(typeValue.start, typeValue.end) - Utility.duration(value.lesson_start, value.lesson_end);
-							SMSService.sendSMS({
-								to: this.Student.parent_phone,
-								text: this.Student.name + '학생의 수정된 수업 입니다.\n' + Utility.LessonInfo(value),
-							});
+							// SMSService.sendSMS({
+							// 	to: this.Student.parent_phone,
+							// 	text: this.Student.name + '학생의 수정된 수업 입니다.\n' + Utility.LessonInfo(value),
+							// });
 						}
 					})
 					.catch(error => {
@@ -312,6 +316,13 @@
 					});
 			},
 			fetchStudentDiarys() {
+				if (Utility.compTime(this.load.start, this.load.end) === 1) {
+					this.$notify({
+						title: '입력값을 검토해주세요.',
+						type: 'warn',
+					});
+					return;
+				}
 				while (this.CompletedDiarys.length) this.CompletedDiarys.pop();
 				while (this.noneCompletedDiarys.length) this.noneCompletedDiarys.pop();
 				StudentService.getStudentDiaryByStudentId(this.$route.params.StudentId, {
@@ -372,8 +383,8 @@
 					teacher: this.Diary.teacher,
 					lesson_type: this.Diary.lesson_type,
 					lesson_date: this.Diary.lesson_date,
-                    lesson_start: this.Diary.lesson_start,
-                    lesson_end: this.Diary.lesson_end,
+					lesson_start: this.Diary.lesson_start,
+					lesson_end: this.Diary.lesson_end,
 					lesson_about: this.Diary.lesson_about,
 				})
 					.then((response) => {
@@ -386,20 +397,20 @@
 						this.Pay.Time += parseFloat(Utility.duration(response.data.Diary.lesson_start, response.data.Diary.lesson_end));
 						this.noneCompletedDiarys.push(response.data.Diary);
 						console.log('the end...');
-						SMSService.sendSMS({
-							to: this.Student.parent_phone,
-							text: this.Student.name + '학생의 수업 내용입니다.\n' + Utility.LessonInfo(response.data.Diary),
-						})
-							.then((response) => {
-								console.log('success' + response.data);
-							})
-							.catch(error => {
-								this.$notify({
-									title: '메세지 전송에 실패하였습니다.',
-									type: 'error',
-								});
-								console.log('send sms error' + error.message);
-							});
+						// SMSService.sendSMS({
+						// 	to: this.Student.parent_phone,
+						// 	text: this.Student.name + '학생의 수업 내용입니다.\n' + Utility.LessonInfo(response.data.Diary),
+						// })
+						// 	.then((response) => {
+						// 		console.log('success' + response.data);
+						// 	})
+						// 	.catch(error => {
+						// 		this.$notify({
+						// 			title: '메세지 전송에 실패하였습니다.',
+						// 			type: 'error',
+						// 		});
+						// 		console.log('send sms error' + error.message);
+						// 	});
 					})
 					.catch((error) => {
 						this.$notify({

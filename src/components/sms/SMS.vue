@@ -173,11 +173,17 @@
 					msg: msg,
 					tmplId: this.selectedTemplateId,
 				})
-					.then(() => {
-						//
+					.then((response) => {
+						this.$notify({
+                            title: '메세지 전송에 성공하였습니다.',
+                            type: 'success',
+                        });
 					})
 					.catch(() => {
-						//
+						this.$notify({
+                            title: '메세지 전송에 실파하였습니다.',
+                            type: 'error',
+                        });
 					});
 			},
 			doAddTarget() {

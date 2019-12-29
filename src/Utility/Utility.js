@@ -13,7 +13,7 @@ export default class Utility {
 
     static getDateBaseNow(year, month, day) {
         const date = new Date(Date.now());
-        const RoundDate = this.RoundDate(date.getFullYear() + year, date.getMonth() + 1 + month, date.getDay() + 1 + day);
+        const RoundDate = this.RoundDate(date.getFullYear() + year, date.getMonth() + 1 + month, date.getDate() + day);
         return RoundDate.year + '-' + RoundDate.month + '-' + RoundDate.day;
     }
 
@@ -21,6 +21,25 @@ export default class Utility {
         const date = new Date(Date.now());
         const RoundTime = this.RoundTime(date.getHours() + hour, date.getMinutes() + minute);
         return RoundTime.hour + ':' + RoundTime.minute;
+    }
+
+    static convertDateToString(E) {
+        let date_ = new Date(E);
+        return (date_.getFullYear() + '-' + (date_.getMonth() + 1) + '-' + date_.getDate()).toString();
+    }
+
+    static convertStringToDate(E) {
+        let date_ = [];
+        if (E !== null) {
+            E.split('-').forEach(d => {
+                date_.push(parseInt(d));
+            });
+            E = new Date(date_[0], date_[1] - 1, date_[2]);
+        } else {
+            E = new Date(Date.now());
+        }
+        console.log('!@#: ' + E);
+        return E;
     }
 
     static DateTimeTo2Digit(src) {
@@ -32,6 +51,14 @@ export default class Utility {
         const Time1 = new Date('2019-1-1 ' + T1);
         const Time2 = new Date('2019-1-1 ' + T2);
         return Time1 - Time2;
+    }
+
+    static compTime(T1, T2) {
+        let date1 = this.convertStringToDate(T1);
+        let date2 = this.convertStringToDate(T2);
+        if(date1 > date2) return 1;
+        else if(date1 === date2) return 0;
+        else return -1;
     }
 
     static RoundDate(year, month, day) {

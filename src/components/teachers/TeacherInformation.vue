@@ -69,7 +69,9 @@
                                 <md-card-content>
                                     <transition name="fade">
                                         <div v-if="noneCompletedShow">
-                                            <DiaryTeacher v-for="diary in noneCompletedDiarys" v-bind:DiaryInfo="diary" v-on:update="onChangeDiary"></DiaryTeacher>
+                                            <md-list>
+                                                <DiaryTeacher v-for="diary in noneCompletedDiarys" v-bind:DiaryInfo="diary" v-on:update="onChangeDiary"></DiaryTeacher>
+                                            </md-list>e
                                         </div>
                                     </transition>
                                 </md-card-content>
@@ -86,7 +88,9 @@
                                         <div v-if="CompletedShow" class="md-layout">
                                             <Date class="md-layout-item md-size-50" v-bind:date="load.start" label="시작" v-on:input="onChangeReloadStart"></Date>
                                             <Date class="md-layout-item md-size-50" v-bind:date="load.end" label="끝" v-on:input="onChangeReloadEnd"></Date>
-                                            <DiaryTeacher v-for="diary in CompletedDiarys" v-bind:DiaryInfo="diary"></DiaryTeacher>
+                                            <md-list>
+                                                <DiaryTeacher v-for="diary in CompletedDiarys" v-bind:DiaryInfo="diary"></DiaryTeacher>
+                                            </md-list>
                                         </div>
                                     </transition>
                                 </md-card-content>
@@ -122,7 +126,7 @@
 		data() {
 			return {
 				Label: 'test',
-                vv: null,
+				vv: null,
 
 				Teacher: {
 					name: '',
@@ -215,11 +219,14 @@
 			},
 			onChangeReloadStart(value) {
 				this.load.start = value;
+				this.fetchTeacherDiarys();
 			},
 			onChangeReloadEnd(value) {
 				this.load.end = value;
+				this.fetchTeacherDiarys();
 			},
 			onChangeDiary(value, type, typeValue) {
+				console.log(JSON.stringify(value));
 				value.lesson_date = Utility.StringToDate(value.lesson_date);
 				TeacherService.updateTeacherDiary(value._id, {
 					lesson_complete: value.lesson_complete,
@@ -253,22 +260,22 @@
 				this.ModifyingTeacher = false;
 				TeacherService.updateTeacher(this.$route.params.TeacherId, {
 					department: this.Teacher.department,
-                    phone: this.Teacher.phone,
-                })
-                    .then((response) => {
-                    	this.$notify({
-                            title: '성공',
-                            text: '선생님 정보 수정에 성공했습니다.',
-                            type: 'success',
-                        });
-                    })
-                    .catch((error) => {
+					phone: this.Teacher.phone,
+				})
+					.then((response) => {
+						this.$notify({
+							title: '성공',
+							text: '선생님 정보 수정에 성공했습니다.',
+							type: 'success',
+						});
+					})
+					.catch((error) => {
 						this.$notify({
 							title: '실패',
 							text: '선생님 정보 수정에 실패했습니다.',
 							type: 'error',
 						});
-                    });
+					});
 			},
 			fetchTeacher() {
 				TeacherService.getTeacher(this.$route.params.TeacherId)
@@ -285,7 +292,10 @@
 			fetchTeacherDiarys() {
 				while (this.CompletedDiarys.length) this.CompletedDiarys.pop();
 				while (this.noneCompletedDiarys.length) this.noneCompletedDiarys.pop();
-				TeacherService.getTeacherDiaryByTeacherId(this.$route.params.TeacherId, {})
+				TeacherService.getTeacherDiaryByTeacherId(this.$route.params.TeacherId, {
+					start: this.load.start,
+					end: this.load.end,
+				})
 					.then((response) => {
 						response.data.Diarys.forEach(diary => {
 							if (diary.lesson_complete) {
