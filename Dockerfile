@@ -2,7 +2,7 @@
 FROM alpine:3.11.2
 
 # Add nginx and nodejs
-RUN apk add --update nginx nodejs
+RUN apk add --update nginx nodejs npm
 
 # Create the directories we will need
 RUN mkdir -p /tmp/nginx/vue-single-page-app
@@ -19,7 +19,7 @@ WORKDIR /tmp/nginx/vue-single-page-app
 COPY package*.json ./
 
 # Install the dependencies, can be commented out if you're running the same node version
-RUN npm i npm@latest -g
+# RUN npm i npm@latest -g
 RUN npm install
 
 RUN npm install @vue/cli -g
