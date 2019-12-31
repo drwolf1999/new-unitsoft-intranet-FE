@@ -155,13 +155,10 @@
 			},
 			StudentClick(StudentId) {
 				const NextDestination = '/student/' + StudentId;
-				// if() { TODO 로그인 여부 체크
-				//     //
-				// }z
 				this.$router.push(NextDestination);
 			},
 			RemoveStudent(StudentId) {
-				//
+				return StudentId;
 			},
 		}
 	};

@@ -68,7 +68,6 @@
 	import {validationMixin} from 'vuelidate';
 	import {
 		required,
-		email,
 		minLength,
 		maxLength
 	} from 'vuelidate/lib/validators';
@@ -164,7 +163,7 @@
 							});
 						}
 					})
-					.catch(error => {
+					.catch(() => {
 						this.sending = false;
 						this.$notify({
 							title: '처리중 에러가 발생하였습니다.',
@@ -181,7 +180,7 @@
 					username: this.Register.username,
 					password: this.Register.password,
 				})
-					.then(result => {
+					.then(() => {
 						this.sending = false;
 						this.LoginMode = true;
 						this.$notify({
@@ -190,7 +189,7 @@
 							type: 'success',
 						});
 					})
-					.catch(error => {
+					.catch(() => {
 						this.sending = false;
 						this.$notify({
 							title: '실패...',

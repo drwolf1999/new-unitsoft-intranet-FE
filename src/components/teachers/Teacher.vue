@@ -147,7 +147,7 @@
 					});
 			},
 			RemoveTeacher(TeacherId) {
-				//
+				return TeacherId;
 			},
 		},
 	};

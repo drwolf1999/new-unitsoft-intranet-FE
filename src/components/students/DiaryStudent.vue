@@ -30,7 +30,7 @@
 	import Time from '../form/Time.vue';
 	import Date from '../form/Date.vue';
 	import InputForm from '../form/Input.vue';
-	import Utility from "../../Utility/Utility";
+	import Utility from '../../Utility/Utility';
 
 	export default {
 		name: 'Diary',

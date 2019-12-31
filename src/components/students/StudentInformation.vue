@@ -89,7 +89,7 @@
                                 <transition name="fade">
                                     <div v-if="noneCompletedShow">
                                         <md-list>
-                                            <DiaryStudent v-for="diary in noneCompletedDiarys" v-bind:DiaryInfo="diary" v-on:update="onChangeDiary"></DiaryStudent>
+                                            <DiaryStudent v-for="diary in noneCompletedDiarys" v-bind:key="diary" v-bind:DiaryInfo="diary" v-on:update="onChangeDiary"></DiaryStudent>
                                         </md-list>
                                     </div>
                                 </transition>
@@ -108,7 +108,7 @@
                                         <Date class="md-layout-item md-size-50" v-bind:date="load.start" label="시작" v-on:input="onChangeReloadStart"></Date>
                                         <Date class="md-layout-item md-size-50" v-bind:date="load.end" label="끝" v-on:input="onChangeReloadEnd"></Date>
                                         <md-list>
-                                            <DiaryStudent v-for="diary in CompletedDiarys" v-bind:DiaryInfo="diary"></DiaryStudent>
+                                            <DiaryStudent v-for="diary in CompletedDiarys" v-bind:key="diary" v-bind:DiaryInfo="diary"></DiaryStudent>
                                         </md-list>
                                     </div>
                                 </transition>
@@ -122,7 +122,7 @@
 </template>
 
 <script>
-	import SMSService from '../../service/sms.js';
+	// import SMSService from '../../service/sms.js';
 	import StudentService from '../../service/students.js';
 	import SelectForm from '../form/SelectForm.vue';
 	import DiaryStudent from './DiaryStudent.vue';

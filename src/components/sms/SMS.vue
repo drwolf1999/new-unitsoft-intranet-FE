@@ -65,8 +65,7 @@
 <script>
 	import SelectForm from '../form/SelectForm';
 	import SMSTemplate from '../../constants/KakaoTemplate.js';
-	import VRuntimeTemplate from 'v-runtime-template';
-	import Utility from "../../Utility/Utility";
+	import Utility from '../../Utility/Utility';
 	import SMSService from '../../service/sms.js';
 
 	export default {
@@ -118,6 +117,7 @@
 					department: ele.department,
 					phone: ele.phone,
 				}));
+                // eslint-disable-next-line
 				this.arrayForTarget = ret;
 				return ret;
 			}
@@ -126,11 +126,11 @@
 			convertKakao() {
 				let ret = this.selectedTemplate;
 				for (let i = 0; i < this.obj.input.length; i++) {
-					if(this.kakaoObj.input[i] === '') return '';
+					if (this.kakaoObj.input[i] === '') return '';
 					ret = Utility.kakaoReplace(ret, '#', this.obj.input[i], this.kakaoObj.input[i]);
 				}
 				for (let i = 0; i < this.obj.textarea.length; i++) {
-					if(this.kakaoObj.textarea[i] === '') return '';
+					if (this.kakaoObj.textarea[i] === '') return '';
 					ret = Utility.kakaoReplace(ret, '!', this.obj.textarea[i], this.kakaoObj.textarea[i]);
 				}
 				return ret;
@@ -149,41 +149,41 @@
 			},
 			sendKakao() {
 				let msg = this.convertKakao();
-				if(msg === '') {
+				if (msg === '') {
 					this.$notify({
-                        title: '템플릿 오류',
-                        text: '템플릿 내용이 부족하거나, 템플릿이 선택되지 않았어요.',
-                        type: 'warn',
-                    });
+						title: '템플릿 오류',
+						text: '템플릿 내용이 부족하거나, 템플릿이 선택되지 않았어요.',
+						type: 'warn',
+					});
 					return;
-                }
+				}
 				let phone = [];
 				this.targets.forEach(ele => {
 					phone.push(ele.phone);
 				});
-				if(phone.length === 0) {
+				if (phone.length === 0) {
 					this.$notify({
 						title: '수신자는 1명이상이어야 합니다.',
 						type: 'warn',
 					});
 					return;
-                }
+				}
 				SMSService.sendKakao({
 					phone: phone,
 					msg: msg,
 					tmplId: this.selectedTemplateId,
 				})
-					.then((response) => {
+					.then(() => {
 						this.$notify({
-                            title: '메세지 전송에 성공하였습니다.',
-                            type: 'success',
-                        });
+							title: '메세지 전송에 성공하였습니다.',
+							type: 'success',
+						});
 					})
 					.catch(() => {
 						this.$notify({
-                            title: '메세지 전송에 실파하였습니다.',
-                            type: 'error',
-                        });
+							title: '메세지 전송에 실파하였습니다.',
+							type: 'error',
+						});
 					});
 			},
 			doAddTarget() {
@@ -194,12 +194,11 @@
 					this.targets[this.targets.length - 1].phone = this.targets[this.targets.length - 1].parent_phone;
 			},
 			removeTarget(target) {
-				//
+				return target;
 			}
 		},
 		components: {
 			SelectForm,
-			VRuntimeTemplate,
 		}
 	};
 </script>

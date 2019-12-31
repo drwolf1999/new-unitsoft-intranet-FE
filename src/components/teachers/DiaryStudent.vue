@@ -50,10 +50,10 @@
             },
         },
         components: {
-            // SelectForm,
-            // Date,
+            SelectForm,
+            Date,
             Time,
-            // Utility,
+            Utility,
         },
     };
 </script>

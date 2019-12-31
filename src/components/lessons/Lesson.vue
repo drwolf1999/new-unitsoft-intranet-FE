@@ -80,12 +80,11 @@
 						this.Lessons = response.data.Lessons;
 						this.fetchingLessons = false;
 					})
-					.catch(error => {
+					.catch(() => {
 						this.$notify({
 							title: '에러가 발생했습니다.',
 							type: 'error',
 						});
-						console.log(error);
 					});
 			},
 			AddLesson: function () {
@@ -114,7 +113,7 @@
 							type: '',
 						};
 					})
-					.catch(error => {
+					.catch(() => {
 						this.$notify({
 							title: '생성에 실패하였습니다.',
 							type: 'error',
