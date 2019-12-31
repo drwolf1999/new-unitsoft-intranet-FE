@@ -132,6 +132,7 @@ export default class Utility {
         let obj = [],
             set1 = new Set();
         let start = -1, end = -1;
+        // eslint-disable-next-line
         while (true) {
             start = template.indexOf(type + '{', end + 1);
             if (start === -1) break;
