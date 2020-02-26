@@ -19,7 +19,7 @@ WORKDIR /tmp/nginx/vue-single-page-app
 COPY package*.json ./
 
 # Install the dependencies, can be commented out if you're running the same node version
-# RUN npm i npm@latest -g
+RUN npm i npm@latest -g
 RUN npm install
 
 RUN npm install @vue/cli -g
