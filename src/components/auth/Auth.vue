@@ -31,7 +31,7 @@
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <Button v-bind:content="`Register`" v-bind:text="true" :disabled="sending" @click="RegisterUser"></Button>
+                    <Button v-bind:content="`Register`" v-bind:text="true" :disabled="sending" v-on:click.native="RegisterUser"></Button>
                     <Button v-bind:content="`LoginMode`" v-bind:text="true" v-on:click.native="Mode"></Button>
                 </v-card-actions>
             </v-card>
