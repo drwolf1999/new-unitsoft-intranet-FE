@@ -1,2 +1,3 @@
 /node_modules/*
 src/constants/RestAPI_dev.js
+dist/*
