@@ -38,7 +38,7 @@
                     <v-text-field label="종류" v-model="Lesson.type"></v-text-field>
                 </v-card-text>
                 <v-card-actions>
-                    <Button v-bind:content="`추가하기`" v-bind:text="true" v-on:click.native="AddLesson"></Button>
+                    <Button v-bind:content="`추가하기`" v-bind:textBtn="true" v-on:click.native="AddLesson"></Button>
                 </v-card-actions>
             </v-card>
             <br>

@@ -15,8 +15,8 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <Button v-if="!ModifyingTeacher" v-bind:content="`수정하기`" v-bind:text="true" v-on:click.native="modifyTeacher"></Button>
-                    <Button v-else v-bind:content="`완료`" v-bind:text="true" v-on:click.native="doModifyTeacher"></Button>
+                    <Button v-if="!ModifyingTeacher" v-bind:content="`수정하기`" v-bind:textBtn="true" v-on:click.native="modifyTeacher"></Button>
+                    <Button v-else v-bind:content="`완료`" v-bind:textBtn="true" v-on:click.native="doModifyTeacher"></Button>
                 </v-card-actions>
             </v-card>
             <br>
@@ -42,7 +42,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <Button v-bind:content="`일지추가`" v-bind:text="true" v-on:click.native="AddTeacherDiary"></Button>
+                    <Button v-bind:content="`일지추가`" v-bind:textBtn="true" v-on:click.native="AddTeacherDiary"></Button>
                 </v-card-actions>
             </v-card>
             <br>

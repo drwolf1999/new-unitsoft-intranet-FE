@@ -65,7 +65,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <Button v-bind:text="true" v-bind:content="`추가하기`" v-on:click.native="AddStudent"></Button>
+                    <Button v-bind:textBtn="true" v-bind:content="`추가하기`" v-on:click.native="AddStudent"></Button>
                 </v-card-actions>
             </v-card>
             <br/>

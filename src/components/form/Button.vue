@@ -1,5 +1,5 @@
 <template>
-    <v-btn :text="text" :color="color">{{ content }}</v-btn>
+    <v-btn :text="TextBtn" :color="color">{{ content }}</v-btn>
 </template>
 
 <script>
@@ -7,7 +7,7 @@
         name: 'Button',
         data() {
             return {
-                text: this.Text === undefined ? false : this.Text,
+                TextBtn: this.textBtn === undefined ? false : this.textBtn,
                 color: this.Color === undefined ? 'normal' : this.Color,
             };
         },

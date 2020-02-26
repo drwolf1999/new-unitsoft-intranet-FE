@@ -28,7 +28,7 @@
                             <SelectForm v-bind:selectList="getTargets" v-on:input="onChangeTarget"></SelectForm>
                         </v-col>
                         <v-col cols="2">
-                            <Button v-bind:content="`추가`" v-bind:text="false" v-bind:color="`success`" v-on:click.native="doAddTarget"></Button>
+                            <Button v-bind:content="`추가`" v-bind:textBtn="false" v-bind:color="`success`" v-on:click.native="doAddTarget"></Button>
                         </v-col>
                     </v-row>
                     <v-simple-table>
@@ -49,7 +49,7 @@
                                 <td>{{ target.student ? target.school : target.department }}</td>
                                 <td>{{ target.phone }}</td>
                                 <td>
-                                    <Button v-bind:content="`제거`" v-bind:text="true" v-on:click="removeTarget(target)"></Button>
+                                    <Button v-bind:content="`제거`" v-bind:textBtn="true" v-on:click="removeTarget(target)"></Button>
                                 </td>
                             </tr>
                             </tbody>
@@ -58,7 +58,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <Button v-bind:content="`전송`" v-bind:text="true" v-on:click.native="sendKakao"></Button>
+                    <Button v-bind:content="`전송`" v-bind:textBtn="true" v-on:click.native="sendKakao"></Button>
                 </v-card-actions>
             </v-card>
             <br/>
