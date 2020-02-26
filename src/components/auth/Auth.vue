@@ -1,222 +1,136 @@
 <template>
-    <div class="md-layout md-alignment-center">
-        <div v-if="LoginMode" class="md-layout-item md-size-80">
-            <form novalidate class="md-layout md-alignment-center" @submit.prevent="validateUser('Login')">
-                <md-card class="md-layout-item md-size-50 md-small-size-100">
-                    <md-progress-bar md-mode="indeterminate" v-if="sending"/>
-                    <md-card-header>
-                        <div class="md-title">Login</div>
-                    </md-card-header>
+    <v-container>
+        <v-form v-if="LoginMode">
+            <v-card flat>
+                <v-progress-linear indeterminate color="primary" v-if="sending"/>
+                <v-card-title primary-title>Login</v-card-title>
 
-                    <md-card-content>
-                        <md-field :class="getValidationClass('username')">
-                            <label for="login-username">username</label>
-                            <md-input type="text" name="login-username" id="login-username" v-model="Login.username" :disabled="sending"/>
-                            <span class="md-error" v-if="!$v.Login.username.required">The username is required</span>
-                            <span class="md-error" v-if="!$v.Login.username.minLength">The username is very short!</span>
-                            <span class="md-error" v-if="!$v.Login.username.maxLength">The username is very long! </span>
-                        </md-field>
-                        <md-field :class="getValidationClass('password')">
-                            <label for="login-password">password</label>
-                            <md-input type="password" name="login-password" id="login-password" v-model="Login.password" :disabled="sending"/>
-                            <span class="md-error" v-if="!$v.Login.password.required">The password is required</span>
-                            <span class="md-error" v-if="!$v.Login.password.minLength">The password is very short!</span>
-                            <span class="md-error" v-if="!$v.Login.password.maxLength">The password is very long! </span>
-                        </md-field>
-                    </md-card-content>
+                <v-card-text>
+                    <v-text-field label="username" v-model="Login.username" :rules="usernameRules" :disabled="sending"></v-text-field>
+                    <v-text-field type="password" label="password" v-model="Login.password" :rules="passwordRules" :disabled="sending"></v-text-field>
+                </v-card-text>
 
-                    <md-card-actions>
-                        <md-button type="submit" class="md-primary" :disabled="sending">Login</md-button>
-                        <md-button type="button" class="md-primary" @click="Mode">RegisterMode</md-button>
-                    </md-card-actions>
-                </md-card>
-            </form>
-        </div>
-        <div v-else class="md-layout-item md-size-80">
-            <form novalidate class="md-layout md-alignment-center" @submit.prevent="validateUser('Register')">
-                <md-card class="md-layout-item md-size-50 md-small-size-100">
-                    <md-card-header>
-                        <div class="md-title">Register</div>
-                    </md-card-header>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <Button v-bind:content="`Login`" v-bind:text="true" :disabled="sending" v-on:click.native="LoginUser"></Button>
+                    <Button v-bind:content="`RegisterMode`" v-bind:text="true" v-on:click.native="Mode"></Button>
+                </v-card-actions>
+            </v-card>
+        </v-form>
+        <v-form v-else>
+            <v-card flat>
+                <v-progress-linear indeterminate color="primary" v-if="sending"/>
+                <v-card-title>
+                    <div class="md-title">Register</div>
+                </v-card-title>
 
-                    <md-card-content>
-                        <md-field :class="getValidationClass('username')">
-                            <label for="register-username">username</label>
-                            <md-input type="text" name="register-username" id="register-username" v-model="Register.username" :disabled="sending"/>
-                            <span class="md-error" v-if="!$v.Register.username.required">The username is required</span>
-                        </md-field>
-                        <md-field :class="getValidationClass('password')">
-                            <label for="register-password">password</label>
-                            <md-input type="password" name="register-password" id="register-password" v-model="Register.password" :disabled="sending"/>
-                            <span class="md-error" v-if="!$v.Register.password.required">The password is required</span>
-                        </md-field>
-                    </md-card-content>
+                <v-card-text>
+                    <v-text-field label="username" v-model="Register.username" :disabled="sending"></v-text-field>
+                    <v-text-field type="password" label="password" v-model="Register.password" :disabled="sending"></v-text-field>
+                </v-card-text>
 
-                    <md-progress-bar md-mode="indeterminate" v-if="sending"/>
-
-                    <md-card-actions>
-                        <md-button type="submit" class="md-primary" :disabled="sending">Register</md-button>
-                        <md-button type="button" class="md-primary" @click="Mode">LoginMode</md-button>
-                    </md-card-actions>
-                </md-card>
-            </form>
-        </div>
-    </div>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <Button v-bind:content="`Register`" v-bind:text="true" :disabled="sending" @click="RegisterUser"></Button>
+                    <Button v-bind:content="`LoginMode`" v-bind:text="true" v-on:click.native="Mode"></Button>
+                </v-card-actions>
+            </v-card>
+        </v-form>
+    </v-container>
 </template>
 
 <script>
-	import {validationMixin} from 'vuelidate';
-	import {
-		required,
-		minLength,
-		maxLength
-	} from 'vuelidate/lib/validators';
-	import Auth from '../../service/auth.js';
+    import Auth from '../../service/auth.js';
+    import Button from '../form/Button.vue';
 
-	export default {
-		name: 'FormValidation',
-		mixins: [validationMixin],
-		data: () => ({
-			Login: {
-				username: null,
-				password: null,
-			},
-			Register: {
-				username: null,
-				password: null,
-			},
-			userSaved: false,
-			sending: false,
-			LoginMode: true,
-		}),
-		validations: {
-			Login: {
-				username: {
-					required,
-					minLength: minLength(4),
-					maxLength: maxLength(15),
-				},
-				password: {
-					required,
-					minLength: minLength(8),
-					maxLength: maxLength(20),
-				}
-			},
-			Register: {
-				username: {
-					required,
-					minLength: minLength(4),
-					maxLength: maxLength(15),
-				},
-				password: {
-					required,
-					minLength: minLength(8),
-					maxLength: maxLength(20),
-				},
-			}
-		},
-		methods: {
-			Mode() {
-				this.LoginMode = !this.LoginMode;
-				this.$v.$reset();
-			},
-			getValidationClass(fieldName) {
-				// const field = this.LoginMode ? this.$v.Login[fieldName] : this.$v.Register[fieldName];
-				const field = this.$v.Login[fieldName];
+    export default {
+        name: 'FormValidation',
+        data: () => ({
+            Login: {
+                username: null,
+                password: null,
+            },
+            Register: {
+                username: null,
+                password: null,
+            },
+            usernameRules: [
+                v => !!v || 'username is required!',
+                v => (v && 4 <= v.length && v.length <= 12) || 'username is too short or long!',
+            ],
+            passwordRules: [
+                v => !!v || 'password is required!',
+                v => (v && 4 <= v.length && v.length <= 12) || 'password is too short or long!',
+            ],
+            userSaved: false,
+            sending: false,
+            LoginMode: true,
+        }),
+        methods: {
+            Mode() {
+                this.LoginMode = !this.LoginMode;
+            },
+            LoginUser() {
+                this.sending = true;
+                this.$store.dispatch('LOGIN', {
+                    username: this.Login.username,
+                    password: this.Login.password,
+                })
+                    .then(() => {
+                        this.sending = false;
+                        if (this.$store.getters.isLogined) {
+                            this.$notify({
+                                title: '로그인 성공!',
+                                text: '로그인에 성공하였습니다.',
+                                type: 'success',
+                            });
+                            this.$router.push(this.$store.getters.getNextDestination);
+                        } else {
+                            this.$notify({
+                                title: '로그인 실패..',
+                                text: '정보를 다시 입력해주세요',
+                                type: 'error',
+                            });
+                        }
+                    })
+                    .catch(() => {
+                        this.sending = false;
+                        this.$notify({
+                            title: '처리중 에러가 발생하였습니다.',
+                            text: '문제가 발생한것 같습니다.',
+                            type: 'error',
+                        });
+                    });
+            },
+            RegisterUser() {
+                this.sending = true;
 
-				if (field) {
-					return {
-						'md-invalid': field.$invalid && field.$dirty,
-					};
-				}
-			},
-			clearForm() {
-				this.$v.$reset();
-				if (this.LoginMode) {
-					this.Login.username = null;
-					this.Login.password = null;
-				} else {
-					this.Register.username = null;
-					this.Register.password = null;
-				}
-			},
-			LoginUser() {
-				this.sending = true;
-				this.$store.dispatch('LOGIN', {
-					username: this.Login.username,
-					password: this.Login.password,
-				})
-					.then(() => {
-						this.sending = false;
-						if (this.$store.getters.isLogined) {
-							this.$notify({
-								title: '로그인 성공!',
-								text: '로그인에 성공하였습니다.',
-								type: 'success',
-							});
-							this.$router.push(this.$store.getters.getNextDestination);
-						} else {
-							this.$notify({
-								title: '로그인 실패..',
-								text: '정보를 다시 입력해주세요',
-								type: 'error',
-							});
-						}
-					})
-					.catch(() => {
-						this.sending = false;
-						this.$notify({
-							title: '처리중 에러가 발생하였습니다.',
-							text: '문제가 발생한것 같습니다.',
-							type: 'error',
-						});
-					});
-			},
-			RegisterUser() {
-				this.sending = true;
-
-				// Instead of this timeout, here you can call your API
-				Auth.DoRegister({
-					username: this.Register.username,
-					password: this.Register.password,
-				})
-					.then(() => {
-						this.sending = false;
-						this.LoginMode = true;
-						this.$notify({
-							title: '성공!',
-							text: '회원가입이 성공적으로 이루어졌습니다.',
-							type: 'success',
-						});
-					})
-					.catch(() => {
-						this.sending = false;
-						this.$notify({
-							title: '실패...',
-							text: '회원가입에 실패하였습니다.',
-							type: 'error',
-						});
-					});
-			},
-			validateUser() {
-				this.$v.$touch();
-
-				if (this.LoginMode && !this.$v.Login.$invalid) {
-					this.LoginUser();
-				}
-				if (!this.LoginMode && !this.$v.Register.$invalid) {
-					this.RegisterUser();
-				}
-			}
-		}
-	};
+                // Instead of this timeout, here you can call your API
+                Auth.DoRegister({
+                    username: this.Register.username,
+                    password: this.Register.password,
+                })
+                    .then(() => {
+                        this.sending = false;
+                        this.LoginMode = true;
+                        this.$notify({
+                            title: '성공!',
+                            text: '회원가입이 성공적으로 이루어졌습니다.',
+                            type: 'success',
+                        });
+                    })
+                    .catch(() => {
+                        this.sending = false;
+                        this.$notify({
+                            title: '실패...',
+                            text: '회원가입에 실패하였습니다.',
+                            type: 'error',
+                        });
+                    });
+            },
+        },
+        components: {
+            Button,
+        }
+    };
 </script>
-
-<style lang="scss" scoped>
-    .md-progress-bar {
-        position: absolute;
-        top: 0;
-        right: 0;
-        left: 0;
-    }
-</style>

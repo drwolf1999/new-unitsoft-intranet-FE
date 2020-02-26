@@ -1,165 +1,151 @@
 <template>
-    <div class="md-layout md-alignment-center">
-        <div class="md-layout-item md-size-70">
+    <v-row justify="center">
+        <v-col cols="10">
+            <v-card md-with-hover>
+                <v-card-title>
+                    학생 목록 (총 {{ Students.length }}건)
+                    <v-spacer></v-spacer>
+                    <v-text-field v-model="Query" @keyup.enter="SearchStudents" label="학생검색" append-icon="mdi-magnify"></v-text-field>
+                </v-card-title>
+                <v-simple-table>
+                    <template v-slot:default>
+                        <thead>
+                        <tr>
+                            <th class="text-left">#</th>
+                            <th class="text-left">이름</th>
+                            <th class="text-left">학교 / 학년</th>
+                            <th class="text-left">unitstudyId</th>
+                            <th class="text-left">삭제</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr v-if="fetchingStudents">
+                            <v-progress-linear indeterminate></v-progress-linear>
+                        </tr>
+                        <tr v-else v-for="(student, index) in Students" v-bind:key="student._id">
+                            <td>{{ index }}</td>
+                            <td><a href="javascript:void(0)" @click="StudentClick(student._id)">{{ student.name }}</a></td>
+                            <td>{{ student.school + '/' + student.grade }}</td>
+                            <td>{{ student.unitStudyId }}</td>
+                            <td><a href="javascript:void(0)" @click="RemoveStudent(student._id)">삭제</a></td>
+                        </tr>
+                        </tbody>
+                    </template>
+                </v-simple-table>
+            </v-card>
             <br/>
-            <md-card md-with-hover>
-                <md-table>
-                    <md-table-toolbar>
-                        <div class="md-toolbar-section-start">
-                            <h1 class="md-title">학생 목록 (총 {{ Students.length }}건)</h1>
-                        </div>
-                        <md-field md-clearable class="md-toolbar-section-end">
-                            <label>학생 검색</label>
-                            <md-input placeholder="학생 검색" v-model="Query" @keyup.enter="SearchStudents"></md-input>
-                        </md-field>
-                    </md-table-toolbar>
-                    <md-table-row>
-                        <md-table-head md-numeric>#</md-table-head>
-                        <md-table-head>이름</md-table-head>
-                        <md-table-head>학교 / 학년</md-table-head>
-                        <md-table-head>unitstudyId</md-table-head>
-                        <md-table-head>삭제</md-table-head>
-                    </md-table-row>
-                    <md-table-row v-if="fetchingStudents">
-                        <md-progress-spinner :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
-                    </md-table-row>
-                    <md-table-row v-else v-for="(student, index) in Students" v-bind:key="student._id">
-                        <md-table-cell md-numeric>{{ index }}</md-table-cell>
-                        <md-table-cell><a href="javascript:void(0)" @click="StudentClick(student._id)">{{ student.name }}</a></md-table-cell>
-                        <md-table-cell>{{ student.school + '/' + student.grade }}</md-table-cell>
-                        <md-table-cell>{{ student.unitStudyId }}</md-table-cell>
-                        <md-table-cell><a href="javascript:void(0)" @click="RemoveStudent(student._id)">삭제</a></md-table-cell>
-                    </md-table-row>
-                </md-table>
-            </md-card>
+        </v-col>
+        <v-col cols="10">
+            <v-card>
+                <v-card-title>학생추가</v-card-title>
+                <v-card-text>
+                    <v-row>
+                        <v-col cols="6" md="4">
+                            <v-text-field label="이름" v-model="Student.name"></v-text-field>
+                        </v-col>
+                        <v-col cols="6" md="4">
+                            <v-text-field label="학교" v-model="Student.school"></v-text-field>
+                        </v-col>
+                        <v-col cols="6" md="4">
+                            <v-text-field label="학년" v-model="Student.grade"></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="6" md="4">
+                            <v-text-field label="유닛스터디 ID" v-model="Student.unitStudyId"></v-text-field>
+                        </v-col>
+                        <v-col cols="6" md="4">
+                            <v-text-field label="전화번호" v-model="Student.phone"></v-text-field>
+                        </v-col>
+                        <v-col cols="6" md="4">
+                            <v-text-field label="부모님 전화번호" v-model="Student.parent_phone"></v-text-field>
+                        </v-col>
+                    </v-row>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <Button v-bind:text="true" v-bind:content="`추가하기`" v-on:click.native="AddStudent"></Button>
+                </v-card-actions>
+            </v-card>
             <br/>
-        </div>
-        <div class="md-layout-item md-size-70">
-            <md-card md-with-hover>
-                <md-card-header>
-                    <div class="md-title">학생추가</div>
-                </md-card-header>
-                <md-card-content>
-                    <div class="md-layout md-gutter">
-                        <div class="md-layout-item md-size-30">
-                            <md-field>
-                                <label for="name">이름</label>
-                                <md-input v-model="Student.name" id="name" placeholder=""></md-input>
-                            </md-field>
-                        </div>
-                        <div class="md-layout-item md-size-30">
-                            <md-field>
-                                <label for="school">학교</label>
-                                <md-input v-model="Student.school" id="school" placeholder=""></md-input>
-                            </md-field>
-                        </div>
-                        <div class="md-layout-item md-size-30">
-                            <md-field>
-                                <label for="grade">학년</label>
-                                <md-input v-model="Student.grade" id="grade" placeholder=""></md-input>
-                            </md-field>
-                        </div>
-                        <div class="md-layout-item md-size-30">
-                            <md-field>
-                                <label for="unitstudy_id">유닛스터디 ID</label>
-                                <md-input v-model="Student.unitStudyId" id="unitstudy_id" placeholder=""></md-input>
-                            </md-field>
-                        </div>
-                        <div class="md-layout-item md-size-30">
-                            <md-field>
-                                <label for="phone">학생 전화번호</label>
-                                <md-input v-model="Student.phone" id="phone" placeholder=""></md-input>
-                            </md-field>
-                        </div>
-                        <div class="md-layout-item md-size-30">
-                            <md-field>
-                                <label for="parent_phone">부모님 전화번호</label>
-                                <md-input v-model="Student.parent_phone" id="parent_phone" placeholder=""></md-input>
-                            </md-field>
-                        </div>
-                    </div>
-                </md-card-content>
-                <md-card-actions>
-                    <md-button @click="AddStudent">
-                        <md-icon>check</md-icon>
-                        추가하기
-                    </md-button>
-                </md-card-actions>
-            </md-card>
-            <br/>
-        </div>
-    </div>
+        </v-col>
+    </v-row>
 </template>
 
 <script>
-	import StudentService from '../../service/students.js';
+    import StudentService from '../../service/students.js';
+    import Button from '../form/Button.vue';
 
-	export default {
-		name: 'Students',
-		data() {
-			return {
-				Query: '',
-				fetchingStudents: false,
-				Students: [],
-				Student: {
-					name: '',
-					school: '',
-					grade: '',
-					unitStudyId: '',
-					phone: '',
-					parent_phone: '',
-				},
-			};
-		},
-		methods: {
-			SearchStudents() {
-				this.fetchingStudents = true;
-				if (this.Query === '') {
-					this.$notify({
-						title: '입력값이 없습니다.',
-						text: '다시 입력해주세요',
-						type: 'warn',
-					});
-					this.fetchingStudents = false;
-					return;
-				}
-				StudentService.getStudents(this.Query)
-					.then((response) => {
-						this.Students = response.data.students;
-						this.fetchingStudents = false;
-					})
-					.catch((err) => {
-						console.log(err);
-					});
-			},
-			AddStudent() {
-				StudentService.addStudent(this.Student)
-					.then((response) => {
-						this.$notify({
-							title: response.data.msg,
-							text: '성공했습니다.',
-							type: 'success',
-						});
-						this.Student = {
-							name: '',
-							school: '',
-							grade: '',
-							unitStudyId: '',
-							phone: '',
-							parent_phone: '',
-						};
-					})
-					.catch(err => {
-						console.log(err);
-					});
-			},
-			StudentClick(StudentId) {
-				const NextDestination = '/student/' + StudentId;
-				this.$router.push(NextDestination);
-			},
-			RemoveStudent(StudentId) {
-				return StudentId;
-			},
-		}
-	};
+    export default {
+        name: 'Students',
+        data() {
+            return {
+                Query: '',
+                fetchingStudents: false,
+                Students: [],
+                Student: {
+                    name: '',
+                    school: '',
+                    grade: '',
+                    unitStudyId: '',
+                    phone: '',
+                    parent_phone: '',
+                },
+            };
+        },
+        methods: {
+            SearchStudents() {
+                this.fetchingStudents = true;
+                if (this.Query === '') {
+                    this.$notify({
+                        title: '입력값이 없습니다.',
+                        text: '다시 입력해주세요',
+                        type: 'warn',
+                    });
+                    this.fetchingStudents = false;
+                    return;
+                }
+                StudentService.getStudents(this.Query)
+                    .then((response) => {
+                        this.Students = response.data.students;
+                        this.fetchingStudents = false;
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            },
+            AddStudent() {
+                StudentService.addStudent(this.Student)
+                    .then((response) => {
+                        this.$notify({
+                            title: response.data.msg,
+                            text: '성공했습니다.',
+                            type: 'success',
+                        });
+                        this.Student = {
+                            name: '',
+                            school: '',
+                            grade: '',
+                            unitStudyId: '',
+                            phone: '',
+                            parent_phone: '',
+                        };
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            },
+            StudentClick(StudentId) {
+                const NextDestination = '/student/' + StudentId;
+                this.$router.push(NextDestination);
+            },
+            RemoveStudent(StudentId) {
+                return StudentId;
+            },
+        },
+        components: {
+            Button,
+        },
+    };
 </script>

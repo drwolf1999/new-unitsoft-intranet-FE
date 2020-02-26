@@ -1,4 +1,4 @@
-const SERVER_DOMAIN = 'http://108.61.181.24:701:8002/';
+const SERVER_DOMAIN = 'http://192.168.0.15:2931/';
 
 export default {
     SERVER_DOMAIN: SERVER_DOMAIN,

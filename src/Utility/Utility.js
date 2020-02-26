@@ -38,8 +38,17 @@ export default class Utility {
         } else {
             E = new Date(Date.now());
         }
-        console.log('!@#: ' + E);
         return E;
+    }
+
+    static digit1To2(src) {
+        if (src.length < 2) return '0' + src;
+        return src;
+    }
+
+    static TimeDigit1To2(src) {
+        let t = src.split(':');
+        return this.digit1To2(t[0]) + ':' + this.digit1To2(t[1]);
     }
 
     static DateTimeTo2Digit(src) {
@@ -56,8 +65,8 @@ export default class Utility {
     static compTime(T1, T2) {
         let date1 = this.convertStringToDate(T1);
         let date2 = this.convertStringToDate(T2);
-        if(date1 > date2) return 1;
-        else if(date1 === date2) return 0;
+        if (date1 > date2) return 1;
+        else if (date1 === date2) return 0;
         else return -1;
     }
 

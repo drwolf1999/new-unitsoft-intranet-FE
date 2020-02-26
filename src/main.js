@@ -7,6 +7,7 @@ import store from './store/store.js';
 import 'vue-search-select/dist/VueSearchSelect.css';
 import Datetime from 'vue-ctk-date-time-picker';
 import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';
+import vuetify from '@/plugins/vuetify';
 
 Vue.config.productionTip = false;
 
@@ -15,5 +16,6 @@ Vue.component('datetime', Datetime);
 new Vue({
     router,
     store,
-    render: h => h(App),
+    vuetify,
+    render: h => h(App)
 }).$mount('#app');

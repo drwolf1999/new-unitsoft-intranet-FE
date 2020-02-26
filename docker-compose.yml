@@ -1,0 +1,34 @@
+version: "2"
+services:
+  intranet_backend:
+    container_name: intranet_backend
+    restart: always
+    build: ./new-unitsoft-intranet
+    ports:
+      - "2931:3000"
+      - "8443:8443"
+    links:
+      - unit_mongo_server
+    depends_on:
+      - unit_mongo_server
+  unit_mongo_server:
+    container_name: unit_mongo_server
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=UnitSoft_Intranet
+      - MONGO_INITDB_ROOT_PASSWORD=UnitSoft25*!
+    volumes:
+      - ./mongoData:/data/db
+    ports:
+      - "27017:27017"
+    command: mongod --auth
+  intranet_frontend:
+    container_name: intranet_frontend
+    restart: always
+    build: ./new-unitsoft-intranet-FE
+    ports:
+      - "8000:80"
+    depends_on:
+      - intranet_backend
+    links:
+      - intranet_backend

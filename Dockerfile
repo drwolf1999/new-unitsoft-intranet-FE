@@ -29,7 +29,6 @@ RUN npm install @vue/cli-service-global -g
 COPY . .
 
 # run webpack and the vue-loader
-RUN npm cache clean -f
 RUN vue build
 
 # copy the built app to our served directory
