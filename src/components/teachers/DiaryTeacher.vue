@@ -23,34 +23,11 @@
         <td v-if="isModifyingDiary"></td>
         <td v-if="isModifyingDiary"><a href="javascript:void(0);" @click="EditDiary">수정하기</a></td>
     </tr>
-<!--    -->
-<!--    <md-list-item>-->
-<!--        <div v-if="Diary.lesson_complete">-->
-<!--            <span>[{{Diary.lesson_date | dateToString }} / {{Diary.lesson_start}}~{{Diary.lesson_end}}] / {{Diary.lesson_type.type}}</span>-->
-<!--        </div>-->
-<!--        <div v-else>-->
-<!--            <div class="md-layout md-gutter" v-if="isModifyingDiary">-->
-<!--                <Date v-bind:date="Diary.lesson_date" class="md-layout-item md-size-33" label="날짜" v-on:input="onModifyDiaryDate"></Date>-->
-<!--                <Time v-bind:time="Diary.lesson_start" class="md-layout-item md-size-33" label="시작 시간" v-on:input="onModifyDiaryStart"></Time>-->
-<!--                <Time v-bind:time="Diary.lesson_end" class="md-layout-item md-size-33" label="종료 시간" v-on:input="onModifyDiaryEnd"></Time>-->
-<!--                <InputForm v-bind:data="Diary.lesson_type.type" label="수업" class="my-layout-item" v-on:input="onModifyLesson"></InputForm>-->
-<!--                <md-button @click="EditDiary" class="md-layout-item md-size-100">수정하기</md-button>-->
-<!--            </div>-->
-<!--            <div v-else>-->
-<!--                <md-checkbox v-model="DiaryCheck">-->
-<!--                    [{{Diary.lesson_date | dateToString }} / {{Diary.lesson_start}}~{{Diary.lesson_end}}] / {{Diary.lesson_type.type}}-->
-<!--                    <a href="javascript:void(0);" @click="doCompleteDiary">결제 완료</a>-->
-<!--                    <a href="javascript:void(0);" @click="doModifyDiary">일지 수정</a>-->
-<!--                </md-checkbox>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </md-list-item>-->
 </template>
 
 <script>
 	import Time from '../form/Time.vue';
 	import Date from '../form/Date.vue';
-	import InputForm from '../form/Input.vue';
 	import Utility from '../../Utility/Utility';
 
 	export default {
@@ -105,7 +82,6 @@
 		components: {
 			Time,
 			Date,
-			InputForm,
 		},
 	};
 </script>
