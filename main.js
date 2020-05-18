@@ -5,12 +5,7 @@ import App from './src/App'
 import VueNotification from 'vue-notification';
 import router from './src/router/router.js';
 import store from './src/store/store.js';
-// import VueMaterial from 'vue-material';
-
 import vuetify from '@/plugins/vuetify'; // path to vuetify export
-
-// import 'vue-material/dist/vue-material.min.css';
-// import 'vue-material/dist/theme/default.css'
 import 'vue-search-select/dist/VueSearchSelect.css';
 Vue.config.productionTip = false;
 
